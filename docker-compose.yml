@@ -1,0 +1,68 @@
+name: jenkins-agent
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+    compress: "true"
+
+services:
+  jenkins-agent:
+    image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_PUBLISHER:-kostelidisdev}/jenkins-agent:${DOCKER_TAG:-main}
+    container_name: jenkins-agent
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 60s
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      TZ: "${TZ:-Europe/Athens}"
+      JENKINS_URL: "${JENKINS_URL:-http://jenkins:8080}"
+      JENKINS_AGENT_NAME: "${JENKINS_AGENT_NAME:-amd64}"
+      JENKINS_AGENT_WORKDIR: "${JENKINS_AGENT_WORKDIR:-/home/jenkins/agent}"
+      JENKINS_SECRET: "${JENKINS_SECRET:?JENKINS_SECRET is required}"
+      JENKINS_WEB_SOCKET: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - agent:/home/jenkins/agent
+      - remoting:/home/jenkins/.jenkins
+    networks:
+      - jenkins
+    group_add:
+      # Must match the host's docker group: stat -c %g /var/run/docker.sock
+      - "${DOCKER_GID:-984}"
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "agent.jar|remoting.jar"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+      start_interval: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          # noinspection ComposeUnknownValues
+          cpus: "${JENKINS_AGENT_CPU_LIMIT:-2}"
+          # noinspection ComposeUnknownValues
+          memory: "${JENKINS_AGENT_MEMORY_LIMIT:-2G}"
+          # noinspection ComposeUnknownValues
+          pids: ${JENKINS_AGENT_PIDS_LIMIT:-4096}
+        reservations:
+          # noinspection ComposeUnknownValues
+          memory: "${JENKINS_AGENT_MEMORY_RESERVATION:-512M}"
+
+networks:
+  jenkins:
+    name: jenkins
+    # true: join the network created by the Jenkins stack (same host).
+    # false: create it here (agent on a host without the controller).
+    # noinspection ComposeUnknownValues
+    external: ${JENKINS_NETWORK_EXTERNAL:-true}
+
+volumes:
+  agent:
+    name: jenkins-agent_agent
+  remoting:
+    name: jenkins-agent_jenkins
