@@ -63,6 +63,6 @@ networks:
 
 volumes:
   agent:
-    name: jenkins-agent_agent
+    name: jenkins-agent
   remoting:
-    name: jenkins-agent_jenkins
+    name: jenkins-agent-remoting
