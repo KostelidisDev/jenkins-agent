@@ -76,8 +76,8 @@ The agent connects over WebSocket, so only the controller's HTTP(S) port needs t
 
 | Volume | Mounted at | Purpose |
 | --- | --- | --- |
-| `jenkins-agent_agent` | `/home/jenkins/agent` | Workspaces |
-| `jenkins-agent_jenkins` | `/home/jenkins/.jenkins` | Remoting cache |
+| `jenkins-agent-agent` | `/home/jenkins/agent` | Workspaces |
+| `jenkins-agent-jenkins` | `/home/jenkins/.jenkins` | Remoting cache |
 
 ## Image tags
 
