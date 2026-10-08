@@ -8,7 +8,7 @@ FROM docker:${DOCKER_CLI_TAG} AS docker-cli
 FROM jenkins/inbound-agent:${INBOUND_AGENT_TAG}
 
 USER root
-RUN apk add --no-cache procps flock
+RUN apk add --no-cache procps flock zip
 
 COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker-cli /usr/local/libexec/docker/cli-plugins /usr/local/libexec/docker/cli-plugins
