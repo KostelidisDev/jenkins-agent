@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-ARG INBOUND_AGENT_TAG=3391.va_37fa_a_305d6d-4-alpine-jdk25
-ARG DOCKER_CLI_TAG=29.8.2-cli-alpine3.24
+ARG INBOUND_AGENT_TAG=3391.va_37fa_a_305d6d-6-alpine-jdk25
+ARG DOCKER_CLI_TAG=29.9.2-cli-alpine3.24
 
 FROM docker:${DOCKER_CLI_TAG} AS docker-cli
 
