@@ -1,11 +1,8 @@
 # syntax=docker/dockerfile:1
 
-ARG INBOUND_AGENT_TAG=3391.va_37fa_a_305d6d-6-alpine-jdk25
-ARG DOCKER_CLI_TAG=29.9.2-cli-alpine3.24
+FROM docker:29.9.2-cli-alpine3.24 AS docker-cli
 
-FROM docker:${DOCKER_CLI_TAG} AS docker-cli
-
-FROM jenkins/inbound-agent:${INBOUND_AGENT_TAG}
+FROM jenkins/inbound-agent:3391.va_37fa_a_305d6d-6-alpine-jdk25
 
 USER root
 RUN apk add --no-cache procps flock zip
