@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker:29.9.2-cli-alpine3.24 AS docker-cli
+FROM docker:29.10.0-cli-alpine3.24 AS docker-cli
 
 FROM jenkins/inbound-agent:3391.va_37fa_a_305d6d-6-alpine-jdk25
 
